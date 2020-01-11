@@ -6,17 +6,21 @@ const bodyParser = require('body-parser')
 const pgp = require('pg-promise')()
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
+const path = require('path')
 
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
 const SALT_ROUNDS = 10
-
+// For our partials pages, join current directory name to our views folder
+const VIEWS_PATH = path.join(__dirname, '/views')
 
 // View engine config
 // Use mustache as the engine
-app.engine('mustache', mustacheExpress())
+// pass in path to partials
+app.engine('mustache', mustacheExpress(VIEWS_PATH + '/partials', '.mustache'))
 // Set up views directory, views is located in the /views directory
-app.set('views', './views')
+// Changed from ./views to VIEWS PATH
+app.set('views', 'VIEWS_PATH')
 // Whatever view engine is, use mustache
 app.set('view engine', 'mustache')
 // Middleware to use body Parser
