@@ -5,6 +5,8 @@ const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
 const pgp = require('pg-promise')()
 const bcrypt = require('bcryptjs')
+const session = require('express-session')
+
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
 const SALT_ROUNDS = 10
@@ -19,9 +21,19 @@ app.set('views', './views')
 app.set('view engine', 'mustache')
 // Middleware to use body Parser
 app.use(bodyParser.urlencoded({extended: false}))
+//Add middleware to handle a session
+app.use(session({
+    secret: 'aljfajejsj',
+    resave: false,
+    // Only save the session when we put something (login)
+    saveUninitialized: false
+}))
 // Connect our DB
 const db = pgp(CONNECTION_STRING)
-
+//Add a route to articles page
+app.get('/users/articles',(req,res)=> {
+    res.render('articles', {username: req.session.user.username})
+})
 // Add a route to the login page
 app.get('/login', (req,res) => {
     res.render('login')
@@ -38,7 +50,13 @@ app.post('/login', (req,res) => {
             bcrypt.compare(password,user.password,function(error,result) {
                 // If the result does exist and the pw matches
                 if(result) {
-                    res.send('Success!@!')
+
+                    // put username and userID in the session
+                    if(req.session) {
+                        req.session.user = {userId: user.userID, username: user.username}
+                    }
+                    // Redirect to a new route
+                    res.redirect('/users/articles')
                 } else {
                     // If pw doesn't match
                     res.render('login', {message: "Invalid username or password!"})
