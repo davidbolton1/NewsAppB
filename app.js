@@ -20,7 +20,7 @@ const VIEWS_PATH = path.join(__dirname, '/views')
 app.engine('mustache', mustacheExpress(VIEWS_PATH + '/partials', '.mustache'))
 // Set up views directory, views is located in the /views directory
 // Changed from ./views to VIEWS PATH
-app.set('views', 'VIEWS_PATH')
+app.set('views', VIEWS_PATH)
 // Whatever view engine is, use mustache
 app.set('view engine', 'mustache')
 // Middleware to use body Parser
