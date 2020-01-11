@@ -4,8 +4,10 @@ const app = express()
 const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
 const pgp = require('pg-promise')()
+const bcrypt = require('bcryptjs')
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
+const SALT_ROUNDS = 10
 
 
 // View engine config
@@ -38,9 +40,14 @@ app.post('/register', (req,res) => {
             res.render('register', {message: "Username exists"})
         } else {
             // insert user into the users table
-            db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username,password])
-            .then(()=> {
-                res.send('SUCCESS')
+            bcrypt.hash(password, SALT_ROUNDS,function(error, hash) {
+                if(error == null){
+                    // instead of [username, password] we use the has of the password
+                    db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username,hash])
+                    .then(()=> {
+                        res.send('SUCCESS')
+                    })
+                }
             })
         }
     })
