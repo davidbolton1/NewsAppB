@@ -22,6 +22,35 @@ app.use(bodyParser.urlencoded({extended: false}))
 // Connect our DB
 const db = pgp(CONNECTION_STRING)
 
+// Add a route to the login page
+app.get('/login', (req,res) => {
+    res.render('login')
+})
+// Add a post route to login that connects to our DB
+app.post('/login', (req,res) => {
+    let username = req.body.username
+    let password = req.body.password
+
+    db.oneOrNone('SELECT userid,username,password FROM users WHERE username = $1',[username])
+    .then((user) => {
+        // check for user's password
+        if(user) {
+            bcrypt.compare(password,user.password,function(error,result) {
+                // If the result does exist and the pw matches
+                if(result) {
+                    res.send('Success!@!')
+                } else {
+                    // If pw doesn't match
+                    res.render('login', {message: "Invalid username or password!"})
+                }
+            })
+            // If  username deoes not exist
+        } else {
+            res.render('login', {message: "Invalid username or password!"})
+        }
+    })
+
+})
 // Add a route to the 'register page' if the user visits /register
 app.get('/register', (req,res) => {
     res.render('register')
