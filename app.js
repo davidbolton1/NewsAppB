@@ -24,7 +24,9 @@ app.set('views', VIEWS_PATH)
 // Whatever view engine is, use mustache
 app.set('view engine', 'mustache')
 // Middleware to use body Parser
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 //Add middleware to handle a session
 app.use(session({
     secret: 'aljfajejsj',
@@ -34,74 +36,104 @@ app.use(session({
 }))
 // Connect our DB
 const db = pgp(CONNECTION_STRING)
+//Add a route to the add-stuff
+app.get('/users/add-stuff', (req, res) => {
+    res.render('add-stuff')
+});
+//Add a post route to the add stuff
+app.post('/users/add-stuff', (req, res) => {
+    let title = req.body.title
+    let description = req.body.description
+    let userId = req.session.user.userId
+    // Insert stuff into our database
+    db.none('insert into articles(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
+        .then(() => {
+            res.send('success')
+        })
+});
 //Add a route to articles page
-app.get('/users/articles',(req,res)=> {
-    res.render('articles', {username: req.session.user.username})
+app.get('/users/articles', (req, res) => {
+    // If a user is logged in, show their articles
+       let userId = req.session.user.userId
+       db.any('select articleid,title,body from articles where userid = $1', [userId])
+        .then((articles) => { 
+            res.render('articles', {articles: articles})
+        })
+    
 })
 // Add a route to the login page
-app.get('/login', (req,res) => {
+app.get('/login', (req, res) => {
     res.render('login')
 })
 // Add a post route to login that connects to our DB
-app.post('/login', (req,res) => {
+app.post('/login', (req, res) => {
     let username = req.body.username
     let password = req.body.password
 
-    db.oneOrNone('SELECT userid,username,password FROM users WHERE username = $1',[username])
-    .then((user) => {
-        // check for user's password
-        if(user) {
-            bcrypt.compare(password,user.password,function(error,result) {
-                // If the result does exist and the pw matches
-                if(result) {
+    db.oneOrNone('SELECT userid,username,password FROM users WHERE username = $1', [username])
+        .then((user) => {
+            // check for user's password
+            if (user) {
+                bcrypt.compare(password, user.password, function (error, result) {
+                    // If the result does exist and the pw matches
+                    if (result) {
 
-                    // put username and userID in the session
-                    if(req.session) {
-                        req.session.user = {userId: user.userID, username: user.username}
+                        // put username and userID in the session
+                        if (req.session) {
+                            req.session.user = {
+                                userId: user.userid,
+                                username: user.username
+                            }
+                        }
+                        // Redirect to a new route
+                        res.redirect('/users/articles')
+                    } else {
+                        // If pw doesn't match
+                        res.render('login', {
+                            message: "Invalid username or password!"
+                        })
                     }
-                    // Redirect to a new route
-                    res.redirect('/users/articles')
-                } else {
-                    // If pw doesn't match
-                    res.render('login', {message: "Invalid username or password!"})
-                }
-            })
-            // If  username deoes not exist
-        } else {
-            res.render('login', {message: "Invalid username or password!"})
-        }
-    })
+                })
+                // If  username deoes not exist
+            } else {
+                res.render('login', {
+                    message: "Invalid username or password!"
+                })
+            }
+        })
 
 })
 // Add a route to the 'register page' if the user visits /register
-app.get('/register', (req,res) => {
+app.get('/register', (req, res) => {
     res.render('register')
 })
 // Add a post route for the register form
-app.post('/register', (req,res) => {
+app.post('/register', (req, res) => {
 
     let username = req.body.username
     let password = req.body.password
 
     // Check if the user already exists in the database
     db.oneOrNone('SELECT userid FROM users WHERE username = $1', [username])
-    .then((user) => {
-        // If user exists, return a message
-        if(user) {
-            res.render('register', {message: "Username exists"})
-        } else {
-            // insert user into the users table
-            bcrypt.hash(password, SALT_ROUNDS,function(error, hash) {
-                if(error == null){
-                    // instead of [username, password] we use the has of the password
-                    db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username,hash])
-                    .then(()=> {
-                        res.send('SUCCESS')
-                    })
-                }
-            })
-        }
-    })
+        .then((user) => {
+            // If user exists, return a message
+            if (user) {
+                res.render('register', {
+                    message: "Username exists"
+                })
+            } else {
+                // insert user into the users table
+                bcrypt.hash(password, SALT_ROUNDS, function (error, hash) {
+                    if (error == null) {
+                        // instead of [username, password] we use the has of the password
+                        db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username, hash])
+                            .then(() => {
+                                res.send('SUCCESS')
+                            })
+                    }
+                })
+            }
+        })
 })
 
 
