@@ -54,12 +54,36 @@ app.post('/users/add-stuff', (req, res) => {
 //Add a route to articles page
 app.get('/users/articles', (req, res) => {
     // If a user is logged in, show their articles
-       let userId = req.session.user.userId
+       //let userId = req.session.user.userId
+     let userId = 8
+     // Show articles for a user
        db.any('select articleid,title,body from articles where userid = $1', [userId])
         .then((articles) => { 
             res.render('articles', {articles: articles})
         })
     
+})
+// Add a route for the article edit page
+app.get('/users/articles/edit/:articleId', (req, res) => {
+    // reference the parameter to get the article id
+    let articleId = req.params.articleId
+    db.one('select articleid,title,body from articles where articleid = $1', [articleId])
+    .then((article) => {
+        //Send it to a new page to edit the article
+        res.render('edit-article', article)
+    })
+})
+// Add a post route to the article edit page
+app.post('/users/update-article', (req, res) => {
+    
+    let title = req.body.title
+    let description = req.body.description
+    let articleId = req.body.articleId
+    // Set the article in the DB to what is submitted in the edit field
+    db.none('update articles set title = $1, body = $2 where articleid = $3', [title, description, articleId])
+    .then(() => {
+        res.redirect('/users/articles')
+    })
 })
 // Add a route to the login page
 app.get('/login', (req, res) => {
