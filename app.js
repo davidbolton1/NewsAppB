@@ -42,6 +42,13 @@ app.use(session({
 // Setup routers
 app.use('/',indexRoutes)
 app.use('/users',checkAuthorization, userRoutes)
+// Middleware to check if logged in or logged out
+app.use((req, res, next) => {
+    // If the user is authenticated set to false, else true
+    res.locals.authenticated = req.session.user == null ? false : true
+    next()
+})
+
 // Connect our DB
 db = pgp(CONNECTION_STRING)
 

@@ -1,6 +1,7 @@
 function checkAuthoriation(req, res, next) {
     if (req.session) {
         if(req.session.user) {
+            res.locals.authenticated = true
             next()
         } else {
             res.redirect('/login')
