@@ -5,11 +5,18 @@ const router = express.Router()
 
 const SALT_ROUNDS = 10
 
+/*
 router.get('/', (req,res) => {
   db.any('select articleid,title,body from articles')
   .then((articles) => {
       res.render('index', {articles: articles})
   })
+}) 
+*/
+// Async version
+router.get('/', async (req, res) => {
+  let articles = await db.any('select articleid,title,body from articles')
+  res.render('index', {articles: articles})
 })
 
 router.get('/logout', (req, res, next) => {

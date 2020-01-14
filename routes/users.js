@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 
-
+/*
 router.post('/delete-article', (req,res) => {
   let articleId = req.body.articleId
   // Delete article
@@ -11,6 +11,14 @@ router.post('/delete-article', (req,res) => {
       // Redirect user to article page
       res.redirect('/users/articles')
   })
+})
+*/
+// async version
+router.post('/delete-article', async (req,res) => {
+  let articleId = req.body.articleId
+
+  await db.none('delete from articles where articleid = $1', [articleId])
+  res.redirect('/users/articles')
 })
 
 
