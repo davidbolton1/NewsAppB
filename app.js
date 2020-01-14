@@ -9,7 +9,7 @@ const session = require('express-session')
 const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
-
+const checkAuthorization = require('./checkauth/authorization')
 
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
@@ -41,7 +41,7 @@ app.use(session({
 }))
 // Setup routers
 app.use('/',indexRoutes)
-app.use('/users',userRoutes)
+app.use('/users',checkAuthorization, userRoutes)
 // Connect our DB
 db = pgp(CONNECTION_STRING)
 
