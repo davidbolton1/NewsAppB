@@ -23,6 +23,8 @@ app.engine('mustache', mustacheExpress(VIEWS_PATH + '/partials', '.mustache'))
 app.set('views', VIEWS_PATH)
 // Whatever view engine is, use mustache
 app.set('view engine', 'mustache')
+// Static css page, css is the alias 
+app.use('/css', express.static('css'))
 // Middleware to use body Parser
 app.use(bodyParser.urlencoded({
     extended: false
@@ -36,6 +38,13 @@ app.use(session({
 }))
 // Connect our DB
 const db = pgp(CONNECTION_STRING)
+//Add a route to view all
+app.get('/', (req,res) => {
+    db.any('select articleid,title,body from articles')
+    .then((articles) => {
+        res.render('index', {articles: articles})
+    })
+})
 //Add a route to the add-stuff
 app.get('/users/add-stuff', (req, res) => {
     res.render('add-stuff')
@@ -54,8 +63,8 @@ app.post('/users/add-stuff', (req, res) => {
 //Add a route to articles page
 app.get('/users/articles', (req, res) => {
     // If a user is logged in, show their articles
-       //let userId = req.session.user.userId
-     let userId = 8
+       let userId = req.session.user.userId
+     //let userId = 8
      // Show articles for a user
        db.any('select articleid,title,body from articles where userid = $1', [userId])
         .then((articles) => { 
@@ -82,6 +91,16 @@ app.post('/users/update-article', (req, res) => {
     // Set the article in the DB to what is submitted in the edit field
     db.none('update articles set title = $1, body = $2 where articleid = $3', [title, description, articleId])
     .then(() => {
+        res.redirect('/users/articles')
+    })
+})
+// Add a route to the delete-page
+app.post('/users/delete-article', (req,res) => {
+    let articleId = req.body.articleId
+    // Delete article
+    db.none('delete from articles where articleid = $1', [articleId])
+    .then(() => {
+        // Redirect user to article page
         res.redirect('/users/articles')
     })
 })
@@ -149,7 +168,7 @@ app.post('/register', (req, res) => {
                 // insert user into the users table
                 bcrypt.hash(password, SALT_ROUNDS, function (error, hash) {
                     if (error == null) {
-                        // instead of [username, password] we use the has of the password
+                        // instead of [username, password] add hashed pw
                         db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username, hash])
                             .then(() => {
                                 res.send('SUCCESS')
