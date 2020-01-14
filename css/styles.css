@@ -3,3 +3,13 @@
     /* background-color: blue; */
     /* flex-direction: row; */
 }
+
+.card-title{
+    display: flex;
+    justify-content: center;
+}
+
+.card-text {
+    display: flex;
+    justify-content: center;
+}
