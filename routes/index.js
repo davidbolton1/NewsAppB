@@ -58,7 +58,8 @@ router.post('/register', (req, res) => {
                       // instead of [username, password] add hashed pw
                       db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username, hash])
                           .then(() => {
-                              res.send('SUCCESS')
+                              // res.send('SUCCESS')
+                              res.redirect('login')
                           })
                   }
               })

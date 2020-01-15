@@ -89,8 +89,10 @@ app.post('/login', (req, res) => {
         })
 
 })
-
-
+app.get('/all-stuff', async (req, res) => {
+    let articles = await db.any('select articleid,title,body from articles')
+    res.render('all-stuff', {articles: articles})
+  })
 
 
 // Listen for a specific port
