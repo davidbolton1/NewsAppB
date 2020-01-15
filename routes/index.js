@@ -35,6 +35,9 @@ router.get('/login', (req, res) => {
     res.render('login')
 })
 // Add a post route for the register form
+router.get('/register', (req, res) => {
+  res.render('register')
+})
 router.post('/register', (req, res) => {
 
     let username = req.body.username
