@@ -10,7 +10,7 @@ const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const checkAuthorization = require('./checkauth/authorization')
-const axios = require('axios');
+//const axios = require('axios');
 
 
 const PORT = 3000
@@ -97,49 +97,10 @@ app.get('/all-stuff', async (req, res) => {
         articles: articles
     })
 })
-/*
-app.get('/quoteSearch', (req, res) => {
 
-    async function findNewsArticles() {
-        searchAddress = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=1&apiKey=8346c55c4813473f8f29da212e2e02fe'
-        const data = await axios.get(`${searchAddress}`, {
-                headers: {
-                    "Accept": "application/json",
-                    "pageSize": "10",
-                    "X-Api-Key": "8346c55c4813473f8f29da212e2e02fe"
-                }
-            })
-            .then((data) => {
-                console.log(data.data.articles)
-                console.log(data.data.articles.body)
-                console.log(data.data.articles.author)
-            })
-            .catch((error) => {
-                this.showErrors(error.response.data.error)
-            })
-        return data;
-    }
-    findNewsArticles();
-    res.render('quoteSearch')
-})
 
-//Add a post route to the add stuff
-app.post('/quoteSearch', (req, res) => {
-    console.log(data.data)
-    let title = data.data.title
-    console.log(title)
-    let description = data.data.body
-    console.log(description)
-    let authorId = data.data.author
-    console.log(userId)
-    // Insert stuff into our database
-    // db.none('insert into news(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
-    // db.none('insert into news(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
-    //     .then(() => {
-    //         res.redirect('/quoteSearch')
-    //     })
-});
-*/
+
+
 /*
 app.get('/quoteSearch', (req, res) => {
   const query = 'Trump'; // Date parameter
@@ -164,6 +125,33 @@ app.get('/quoteSearch', (req, res) => {
   }
   findSimilarQuotes();
 })
+*/
+
+/*
+app.get('/quoteSearch', (req, res) => {
+    let myText = 'Please make this text turn yoda style';
+
+    async function yodaText() {
+        const searchAddress = `https://api.funtranslations.com/translate/yoda.json?text=${myText}`
+
+        const quoteResponse = await axios.get(`${searchAddress}`)
+        .then((quoteResponse) => {
+            console.log(quoteResponse)
+        })
+        return quoteResponse
+
+            // headers: {
+            //     "Accept": "application/json",
+            //     "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
+            // }
+
+
+}
+
+yodaText();
+res.render('quoteSearch');
+}
+)
 */
 // Listen for a specific port
 app.listen(PORT, () => {

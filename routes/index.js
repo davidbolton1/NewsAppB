@@ -2,6 +2,8 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
+const axios = require('axios');
+
 
 const SALT_ROUNDS = 10
 
@@ -109,5 +111,57 @@ router.post('/login', (req, res) => {
 
 })
 
+router.get('/usnews', async (req, res) => {
+
+    async function findNewsArticles() {
+        searchAddress = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=8346c55c4813473f8f29da212e2e02fe'
+        const data = await axios.get(`${searchAddress}`, {
+                headers: {
+                    "Accept": "application/json",
+                    "pageSize": "10",
+                    "X-Api-Key": "8346c55c4813473f8f29da212e2e02fe"
+                }
+            })
+            .then((data) => {
+                
+                return myValues = data.data.articles
+                
+                // db.none('insert into newsarticles(title,body) VALUES($1,$2)', [title, body])
+                //     .then(() => {
+                //         res.redirect('/users/articles')
+                //     })
+            })
+            .then((myValues) => {
+                myValues.forEach(function (item, index, list) {
+                    let author = item.author
+                    let title = item.title
+                    let description = item.description
+                    let url = item.url
+                    
+
+                    db.none('insert into newsarticles(title, authorname, body, url) VALUES($1, $2, $3, $4)', [title, author, description, url])
+                    // .then(() => {
+                    //     res.redirect('/users/articles')
+                    // })
+                
+                })
+                return myValues
+                //et title = myValues[1].author
+            })
+            .catch((error) => {
+                this.showErrors(error.response.data.error)
+            })
+        return data;
+    }
+    findNewsArticles();
+    let usnewsarticles = await db.any('select url,title,body from newsarticles')
+    res.render('usnews', {usnewsarticles: usnewsarticles})
+})
+
+// router.get('/all-stuff', async (req, res) => {
+//     let articles = await db.any('select articleid,title,body from articles')
+//     res.render('all-stuff', {articles: articles})
+//   })
+  
 
 module.exports = router
