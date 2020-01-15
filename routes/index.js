@@ -44,27 +44,30 @@ router.post('/register', (req, res) => {
     let username = req.body.username
     let password = req.body.password
 
-    // Check if the user already exists in the database
-    db.oneOrNone('SELECT userid FROM users WHERE username = $1', [username])
-        .then((user) => {
-            // If user exists, return a message
-            if (user) {
-                res.render('register', {
-                    message: "Username exists"
-                })
-            } else {
-                // insert user into the users table
-                bcrypt.hash(password, SALT_ROUNDS, function (error, hash) {
-                    if (error == null) {
-                        // instead of [username, password] add hashed pw
-                        db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username, hash])
-                            .then(() => {
-                                res.send('SUCCESS')
-                            })
-                    }
-                })
-            }
-        })
+
+  // Check if the user already exists in the database
+  db.oneOrNone('SELECT userid FROM users WHERE username = $1', [username])
+      .then((user) => {
+          // If user exists, return a message
+          if (user) {
+              res.render('register', {
+                  message: "Username exists"
+              })
+          } else {
+              // insert user into the users table
+              bcrypt.hash(password, SALT_ROUNDS, function (error, hash) {
+                  if (error == null) {
+                      // instead of [username, password] add hashed pw
+                      db.none('INSERT INTO users(username,password) VALUES($1,$2)', [username, hash])
+                          .then(() => {
+                              // res.send('SUCCESS')
+                              res.redirect('login')
+                          })
+                  }
+              })
+          }
+      })
+
 })
 
 // Add a post route to login that connects to our DB

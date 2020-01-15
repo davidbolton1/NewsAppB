@@ -22,8 +22,15 @@ router.post('/delete-article', async (req,res) => {
 })
 
 
+router.get('/all-stuff', async (req, res) => {
+  let articles = await db.any('select articleid,title,body from articles')
+  res.render('all-stuff', {articles: articles})
+})
+
+
+
 router.get('/add-stuff', (req, res) => {
-  res.render('add-stuff')
+res.render('add-stuff')
 });
 
 //Add a post route to the add stuff
