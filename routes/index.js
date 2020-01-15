@@ -1,4 +1,3 @@
-
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
@@ -70,7 +69,7 @@ router.post('/register', (req, res) => {
 
 })
 
-// Add a post route to login that connects to our DB, and fixed
+// Add a post route to login that connects to our DB
 router.post('/login', (req, res) => {
     let username = req.body.username
     let password = req.body.password
