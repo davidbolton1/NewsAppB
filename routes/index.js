@@ -70,7 +70,7 @@ router.post('/register', (req, res) => {
 
 })
 
-// Add a post route to login that connects to our DB
+// Add a post route to login that connects to our DB, and fixed
 router.post('/login', (req, res) => {
     let username = req.body.username
     let password = req.body.password
