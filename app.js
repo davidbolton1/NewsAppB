@@ -10,6 +10,8 @@ const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const checkAuthorization = require('./checkauth/authorization')
+const axios = require('axios');
+
 
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
@@ -40,8 +42,8 @@ app.use(session({
     saveUninitialized: false
 }))
 // Setup routers
-app.use('/',indexRoutes)
-app.use('/users',checkAuthorization, userRoutes)
+app.use('/', indexRoutes)
+app.use('/users', checkAuthorization, userRoutes)
 // Middleware to check if logged in or logged out
 app.use((req, res, next) => {
     // If the user is authenticated set to false, else true
@@ -91,10 +93,78 @@ app.post('/login', (req, res) => {
 })
 app.get('/all-stuff', async (req, res) => {
     let articles = await db.any('select articleid,title,body from articles')
-    res.render('all-stuff', {articles: articles})
+    res.render('all-stuff', {
+        articles: articles
+    })
+})
+/*
+app.get('/quoteSearch', (req, res) => {
+
+    async function findNewsArticles() {
+        searchAddress = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=1&apiKey=8346c55c4813473f8f29da212e2e02fe'
+        const data = await axios.get(`${searchAddress}`, {
+                headers: {
+                    "Accept": "application/json",
+                    "pageSize": "10",
+                    "X-Api-Key": "8346c55c4813473f8f29da212e2e02fe"
+                }
+            })
+            .then((data) => {
+                console.log(data.data.articles)
+                console.log(data.data.articles.body)
+                console.log(data.data.articles.author)
+            })
+            .catch((error) => {
+                this.showErrors(error.response.data.error)
+            })
+        return data;
+    }
+    findNewsArticles();
+    res.render('quoteSearch')
+})
+
+//Add a post route to the add stuff
+app.post('/quoteSearch', (req, res) => {
+    console.log(data.data)
+    let title = data.data.title
+    console.log(title)
+    let description = data.data.body
+    console.log(description)
+    let authorId = data.data.author
+    console.log(userId)
+    // Insert stuff into our database
+    // db.none('insert into news(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
+    // db.none('insert into news(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
+    //     .then(() => {
+    //         res.redirect('/quoteSearch')
+    //     })
+});
+*/
+/*
+app.get('/quoteSearch', (req, res) => {
+  const query = 'Trump'; // Date parameter
+  
+  
+   async function findSimilarQuotes() {
+  
+      const searchAddress = `https://quotes.rest/quote/search?&minlength=30&maxlength=800&query=${query}&private=false`
+
+  const quoteResponse = await axios.get(`${searchAddress}`, 
+  {headers: {
+    "Accept": "application/json",
+    "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
+  }})
+  .then((quoteResponse) => {
+      console.log(quoteResponse)
   })
-
-
+  .catch((error) => {
+      this.showErrors(error.response.data.error)
+  })
+  return quoteResponse;
+  }
+  findSimilarQuotes();
+})
+*/
 // Listen for a specific port
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
