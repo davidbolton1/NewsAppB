@@ -1,3 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
+
+
 .article-action-button {
     display: flex;
     /* background-color: blue; */
@@ -13,5 +19,3 @@
     display: flex;
     justify-content: center;
 }
-
-/* push test
