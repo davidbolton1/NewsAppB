@@ -12,6 +12,7 @@ router.get('/', (req,res) => {
       res.render('index', {articles: articles})
   })
 }) 
+////not real///
 */
 // Async version
 router.get('/', async (req, res) => {
