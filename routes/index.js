@@ -1,6 +1,10 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const router = express.Router()
+const axios = require('axios');
+const mlSentiment = require('ml-sentiment')
+const sentiment = mlSentiment({lang: 'en'})
+
 
 const SALT_ROUNDS = 10
 
@@ -108,5 +112,134 @@ router.post('/login', (req, res) => {
 
 })
 
+router.get('/usnews', async (req, res) => {
+
+    async function findNewsArticles() {
+        searchAddress = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=75&apiKey=8346c55c4813473f8f29da212e2e02fe'
+        const data = await axios.get(`${searchAddress}`, {
+                headers: {
+                    "Accept": "application/json",
+                    "pageSize": "75",
+                    "X-Api-Key": "8346c55c4813473f8f29da212e2e02fe"
+                }
+            })
+            .then((data) => {
+                
+                return myValues = data.data.articles
+                
+                // db.none('insert into newsarticles(title,body) VALUES($1,$2)', [title, body])
+                //     .then(() => {
+                //         res.redirect('/users/articles')
+                //     })
+            })
+            .then((myValues) => {
+                myValues.forEach(function (item, index, list) {
+                    let author = item.author
+                    let title = item.title
+                    let description = item.description
+                    let url = item.url
+                     
+                    let itemsentiment = sentiment.classify(item.title);
+                        if (itemsentiment >= 5) {
+                          emoji = "😃";
+                        } else if (itemsentiment > 0) {
+                          emoji = "🙂";
+                        } else if (itemsentiment == 0) {
+                          emoji = "😐";
+                        } else {
+                          emoji = "😕";
+                        }
+                    
+
+                    db.none('insert into newsarticles(title, authorname, body, url, sentiment, sentimentemoji) VALUES($1, $2, $3, $4, $5, $6)', [title, author, description, url, itemsentiment, emoji])
+                    // .then(() => {
+                    //     res.redirect('/users/articles')
+                    // })
+                
+                })
+                return myValues
+               /* }) 
+                .then((myValues) => {
+                    myValues.forEach(function( item, index, list) {
+                        console.log(item.title)
+                        item.sentiment = sentiment.classify(item.title);
+                        if (item.sentiment >= 5) {
+                          item.emoji = "😃";
+                        } else if (item.sentiment > 0) {
+                          item.emoji = "🙂";
+                        } else if (item.sentiment == 0) {
+                          item.emoji = "😐";
+                        } else {
+                          item.emoji = "😕";
+                        }
+                        console.log(item.sentiment)
+                        db.none('insert into newsarticles(sentiment) VALUES($1)', [item.emoji])
+                      });
+                      */
+                //et title = myValues[1].author
+            })
+            .catch((error) => {
+                this.showErrors(error.response.data.error)
+            })
+        return data;
+    }
+    findNewsArticles();
+    let usnewsarticles = await db.any('select url,title,body,sentimentemoji from newsarticles')
+    res.render('usnews', {usnewsarticles: usnewsarticles})
+})
+
+
+
+router.get('/worldnews', async (req, res) => {
+
+    async function findWorldNews() {
+        searchAddress = 'https://newsapi.org/v2/top-headlines?&pageSize=60&apiKey=8346c55c4813473f8f29da212e2e02fe'
+        const data = await axios.get(`${searchAddress}`, {
+                headers: {
+                    "Accept": "application/json",
+                    "pageSize": "60",
+                    "X-Api-Key": "8346c55c4813473f8f29da212e2e02fe"
+                }
+            })
+            .then((data) => {
+                
+                return myValues = data.data.articles
+                
+                // db.none('insert into newsarticles(title,body) VALUES($1,$2)', [title, body])
+                //     .then(() => {
+                //         res.redirect('/users/articles')
+                //     })
+            })
+            .then((myValues) => {
+                myValues.forEach(function (item, index, list) {
+                    let author = item.author
+                    let title = item.title
+                    let description = item.description
+                    let url = item.url
+                    
+
+                    db.none('insert into worldnews(title, body, url) VALUES($1, $2, $3)', [title, author, url])
+                    // .then(() => {
+                    //     res.redirect('/users/articles')
+                    // })
+                
+                })
+                return myValues
+                //et title = myValues[1].author
+            })
+            .catch((error) => {
+                this.showErrors(error.response.data.error)
+            })
+        return data;
+    }
+    findWorldNews();
+    let worldnewsarticles = await db.any('select url,title,body from newsarticles')
+    res.render('usnews', {worldnewsarticles: worldnewsarticles})
+})
+// router.get('/all-stuff', async (req, res) => {
+//     let articles = await db.any('select articleid,title,body from articles')
+//     res.render('all-stuff', {articles: articles})
+//   })
+  
 
 module.exports = router

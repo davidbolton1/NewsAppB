@@ -1,0 +1,41 @@
+<html>
+<head>
+<!-- Required meta tags -->
+  {{> header}}
+
+</head>
+
+
+<body>
+
+
+<h1> US News</h1>
+
+<div class="container">
+
+{{> menu}}
+
+<div class="list-group">
+{{#usnewsarticles}}
+<div class="card" style="width: 40rem;">
+  {{! <img class="card-img-top" src="..." alt="Card image cap"> }}
+  <div class="card-body">
+    <h5 class="card-title">{{title}} </h5>
+    <a href={{url}}
+    <p class="card-text">Link to Article</p> 
+    </a>
+    <h6 class="card-footer">Happyness Rating: {{sentimentemoji}}</h1>
+
+    {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
+  </div>
+</div>
+{{/usnewsarticles}}
+</div>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    {{> footer}}
+
+</body>
+</html>
+

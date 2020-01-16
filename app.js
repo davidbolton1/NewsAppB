@@ -10,6 +10,13 @@ const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const checkAuthorization = require('./checkauth/authorization')
+const mlSentiment = require('ml-sentiment')
+const sentiment = mlSentiment({lang: 'en'}); // added this line
+
+
+//const axios = require('axios');
+
+
 
 const PORT = 3000
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
@@ -40,8 +47,8 @@ app.use(session({
     saveUninitialized: false
 }))
 // Setup routers
-app.use('/',indexRoutes)
-app.use('/users',checkAuthorization, userRoutes)
+app.use('/', indexRoutes)
+app.use('/users', checkAuthorization, userRoutes)
 // Middleware to check if logged in or logged out
 app.use((req, res, next) => {
     // If the user is authenticated set to false, else true
@@ -90,11 +97,93 @@ app.post('/login', (req, res) => {
 
 })
 app.get('/all-stuff', async (req, res) => {
+    
     let articles = await db.any('select articleid,title,body from articles')
-    res.render('all-stuff', {articles: articles})
+    res.render('all-stuff', {
+        articles: articles
+    })
+    // articles.forEach(function(title) {
+    //     title.sentiment = sentiment.classify(title.title);
+    //     if (title.sentiment >= 5) {
+    //       title.emoji = "😃";
+    //     } else if (title.sentiment > 0) {
+    //       title.emoji = "🙂";
+    //     } else if (title.sentiment == 0) {
+    //       title.emoji = "😐";
+    //     } else {
+    //       title.emoji = "😕";
+    //     }
+    //     console.log(title.sentiment)
+    //   });
+})
+
+
+app.get('/all-stuff', async (req, res) => {
+    let articles = await db.any('select articleid,title,body from articles')
+    res.render('all-stuff', {
+        articles: articles
+    })
+})
+
+app.get('/happynews', async (req, res) => {
+    let happyarticles = await db.any('select * from newsarticles where sentiment > $1',[0])
+    res.render('happynews', {
+        happyarticles: happyarticles
+    })
+})
+
+/*
+app.get('/quoteSearch', (req, res) => {
+  const query = 'Trump'; // Date parameter
+  
+  
+   async function findSimilarQuotes() {
+  
+      const searchAddress = `https://quotes.rest/quote/search?&minlength=30&maxlength=800&query=${query}&private=false`
+
+  const quoteResponse = await axios.get(`${searchAddress}`, 
+  {headers: {
+    "Accept": "application/json",
+    "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
+  }})
+  .then((quoteResponse) => {
+      console.log(quoteResponse)
   })
+  .catch((error) => {
+      this.showErrors(error.response.data.error)
+  })
+  return quoteResponse;
+  }
+  findSimilarQuotes();
+})
+*/
+
+/*
+app.get('/quoteSearch', (req, res) => {
+    let myText = 'Please make this text turn yoda style';
+
+    async function yodaText() {
+        const searchAddress = `https://api.funtranslations.com/translate/yoda.json?text=${myText}`
+
+        const quoteResponse = await axios.get(`${searchAddress}`)
+        .then((quoteResponse) => {
+            console.log(quoteResponse)
+        })
+        return quoteResponse
+
+            // headers: {
+            //     "Accept": "application/json",
+            //     "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
+            // }
 
 
+}
+
+yodaText();
+res.render('quoteSearch');
+}
+)
+*/
 // Listen for a specific port
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
