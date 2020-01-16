@@ -10,7 +10,12 @@ const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const checkAuthorization = require('./checkauth/authorization')
+const mlSentiment = require('ml-sentiment')
+const sentiment = mlSentiment({lang: 'en'}); // added this line
+
+
 //const axios = require('axios');
+
 
 
 const PORT = 3000
@@ -92,14 +97,40 @@ app.post('/login', (req, res) => {
 
 })
 app.get('/all-stuff', async (req, res) => {
+    
+    let articles = await db.any('select articleid,title,body from articles')
+    res.render('all-stuff', {
+        articles: articles
+    })
+    // articles.forEach(function(title) {
+    //     title.sentiment = sentiment.classify(title.title);
+    //     if (title.sentiment >= 5) {
+    //       title.emoji = "😃";
+    //     } else if (title.sentiment > 0) {
+    //       title.emoji = "🙂";
+    //     } else if (title.sentiment == 0) {
+    //       title.emoji = "😐";
+    //     } else {
+    //       title.emoji = "😕";
+    //     }
+    //     console.log(title.sentiment)
+    //   });
+})
+
+
+app.get('/all-stuff', async (req, res) => {
     let articles = await db.any('select articleid,title,body from articles')
     res.render('all-stuff', {
         articles: articles
     })
 })
 
-
-
+app.get('/happynews', async (req, res) => {
+    let happyarticles = await db.any('select * from newsarticles where sentiment > $1',[0])
+    res.render('happynews', {
+        happyarticles: happyarticles
+    })
+})
 
 /*
 app.get('/quoteSearch', (req, res) => {
