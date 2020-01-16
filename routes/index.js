@@ -113,7 +113,7 @@ router.post('/login', (req, res) => {
 
 })
 
-router.get('/usnews', async (req, res) => {
+router.get('/topnews', async (req, res) => {
 
     async function findNewsArticles() {
         searchAddress = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=75&apiKey=8346c55c4813473f8f29da212e2e02fe'
@@ -186,7 +186,7 @@ router.get('/usnews', async (req, res) => {
     }
     findNewsArticles();
     let usnewsarticles = await db.any('select url,title,body,sentimentemoji from newsarticles')
-    res.render('usnews', {usnewsarticles: usnewsarticles})
+    res.render('topnews', {usnewsarticles: usnewsarticles})
 })
 
 
