@@ -15,11 +15,11 @@
 
 {{> menu}}
 
-<form action='/users/update-article' method="POST">
+<form action='/users/add-stuff' method="POST">
   <div class="form-group">
-    <label for="exampleInputEmail1">Update Title</label>
-    <input type="text" name="title" value="{{title}}" class="form-control" 
-    placeholder="enter title" />
+    <label for="exampleInputEmail1">Title</label>
+    <input type="text" name="title" class="form-control" 
+    placeholder="enter title">
     
   </div>
   <div class="form-group">
@@ -29,8 +29,10 @@
     </textarea>
   </div>
 <input type="hidden" name="articleId" value="{{articleid}}" />
-  <button type="submit" class="btn btn-primary">Submit</button>
-  
+  <button type="submit" class="btn btn-info">Submit</button>
+    {{#message}}
+</div>
+  {{/message}}
 </form>
 
 </div>
