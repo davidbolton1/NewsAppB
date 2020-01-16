@@ -9,30 +9,28 @@
 <body>
 
 
-<h1> Add-Stuff </h1>
+<h1> Add News</h1>
 
 <div class="container">
 
 {{> menu}}
 
-<form action='/users/add-stuff' method="POST">
+<form action='/users/update-article' method="POST">
   <div class="form-group">
-    <label for="exampleInputEmail1">Title</label>
-    <input type="text" name="title" class="form-control" 
-    placeholder="enter title">
+    <label for="exampleInputEmail1">Update Title</label>
+    <input type="text" name="title" value="{{title}}" class="form-control" 
+    placeholder="enter title" />
     
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Description</label>
-    <textarea name="description" class="form-control"></textarea>
+    <textarea name="description" class="form-control">
+    {{body}}
+    </textarea>
   </div>
-
+<input type="hidden" name="articleId" value="{{articleid}}" />
   <button type="submit" class="btn btn-primary">Submit</button>
-  {{#message}}
-<div class="alert alert-danger" role="alert">
-    {{message}}
-</div>
-  {{/message}}
+  
 </form>
 
 </div>

@@ -2,9 +2,24 @@
     box-sizing: border-box;
 }
 
-body {
+html {
+    position: relative;
+}
 
-    
+html, body {
+    background-image: url("./pictures/advertisements-batch-blur-business-518543.jpg");
+    background-size: cover;
+    color:white;
+    height: 100%;
+    margin-bottom: 60px;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+h6 {
+    color:black;
 }
 
 .article-action-button {
@@ -16,9 +31,29 @@ body {
 .card-title{
     display: flex;
     justify-content: center;
+    color:black;
 }
 
 .card-text {
     display: flex;
     justify-content: center;
+}
+
+.list-group {
+    opacity: .8;
+    color:black;
+    width: 100%;
+    /* align-items: flex-start; */
+
+}
+
+.navbar-brand {
+    font-size: 20px;
+}
+
+.sticky-footer {
+    position: relative;
+    display:flex;
+    bottom: 0;
+    height: 60px;
 }
