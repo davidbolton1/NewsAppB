@@ -8,16 +8,7 @@ const sentiment = mlSentiment({ lang: 'en' })
 
 const SALT_ROUNDS = 10
 
-/*
-router.get('/', (req,res) => {
-  db.any('select articleid,title,body from articles')
-  .then((articles) => {
-      res.render('index', {articles: articles})
-  })
-}) 
-////not real///
-*/
-// Async version
+
 router.get('/', async (req, res) => {
     let articles = await db.any('select articleid,title,body from articles')
     res.render('index', { articles: articles })
@@ -149,14 +140,14 @@ router.get('/topnews', async (req, res) => {
                     } else {
                         emoji = "😕";
                     }
-
-
-                    db.none('insert into newsarticles(title, authorname, body, url, sentiment, sentimentemoji) VALUES($1, $2, $3, $4, $5, $6)', [title, author, description, url, itemsentiment, emoji])
-                    // .then(() => {
-                    //     res.redirect('/users/articles')
-                    // })
-
+                db.oneOrNone('select * from newsarticles where title=$1', [title])
+                .then((res) => {
+                    if (!res) {
+                        db.none('insert into newsarticles(title, authorname, body, url, sentiment, sentimentemoji) VALUES($1, $2, $3, $4, $5, $6)', [title, author, description, url, itemsentiment, emoji])
+                    }
                 })
+
+            })
                 return myValues
 
             })
@@ -215,7 +206,7 @@ router.get('/worldnews', async (req, res) => {
         return data;
     }
     findWorldNews();
-    let worldnewsarticles = await db.any('select url,title,body from newsarticles')
+    let worldnewsarticles = await db.any('select url,title,body,emoji from newsarticles')
     res.render('usnews', { worldnewsarticles: worldnewsarticles })
 })
 // router.get('/all-stuff', async (req, res) => {

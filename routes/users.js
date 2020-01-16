@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const mlSentiment = require('ml-sentiment')
+const sentiment = mlSentiment({ lang: 'en' })
 
 
 
@@ -24,32 +26,44 @@ router.post('/delete-article', async (req,res) => {
 
 
 router.get('/all-stuff', async (req, res) => {
-  let articles = await db.any('select articleid,title,body from articles')
+  let articles = await db.any('select articleid,title,body,emoji from articles')
   res.render('all-stuff', {articles: articles})
 })
 
 
 
 router.get('/add-stuff', (req, res) => {
-res.render('add-stuff')
+  res.render('add-stuff')
 });
 
 //Add a post route to the add stuff
 router.post('/add-stuff', (req, res) => {
+  console.log('add article');
   let title = req.body.title
   let description = req.body.description
   let userId = req.session.user.userId
   // Insert stuff into our database
-  db.none('insert into articles(title,body,userid) VALUES($1,$2,$3)', [title, description, userId])
-      .then(() => {
-          res.redirect('/users/articles')
-      })
+
+  let itemsentiment = sentiment.classify(title);
+  if (itemsentiment >= 5) {
+    emoji = "😃";
+  } else if (itemsentiment > 0) {
+    emoji = "🙂";
+  } else if (itemsentiment == 0) {
+    emoji = "😐";
+  } else {
+    emoji = "😕";
+  }
+  db.none('insert into articles(title,body,userid, emoji) VALUES($1,$2,$3, $4)', [title, description, userId, emoji])
+    .then(() => {
+      res.redirect('/users/articles')
+    })
 });
 
 
 // Add a post route to the article edit page
 router.post('/update-article', (req, res) => {
-    
+  console.log('update article'); 
   let title = req.body.title
   let description = req.body.description
   let articleId = req.body.articleId
@@ -57,7 +71,7 @@ router.post('/update-article', (req, res) => {
   db.none('update articles set title = $1, body = $2 where articleid = $3', [title, description, articleId])
   .then(() => {
       res.redirect('/users/articles')
-  })
+    })
 })
 
 // Add a route for the article edit page
@@ -74,10 +88,10 @@ router.get('/articles/edit/:articleId', (req, res) => {
 //Add a route to articles page
 router.get('/articles', (req, res) => {
   // If a user is logged in, show their articles
-     let userId = req.session.user.userId
+    let userId = req.session.user.userId
    //let userId = 8
    // Show articles for a user
-     db.any('select articleid,title,body from articles where userid = $1', [userId])
+    db.any('select articleid,title,body,emoji from articles where userid = $1', [userId])
       .then((articles) => { 
           res.render('articles', {articles: articles})
       })

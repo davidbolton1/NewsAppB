@@ -28,6 +28,10 @@ h6 {
     /* flex-direction: row; */
 }
 
+.card {
+    height: auto; 
+}
+
 .card-title{
     display: flex;
     justify-content: center;
@@ -41,7 +45,6 @@ h6 {
 
 .list-group {
     opacity: .8;
-    color:black;
     width: 100%;
     /* align-items: flex-start; */
 

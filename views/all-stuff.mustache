@@ -17,11 +17,12 @@
 
 <div class="list-group ">
 {{#articles}}
-<div class="card text-dark" style="width: 18rem;">
+<div class="card text-dark">
   {{! <img class="card-img-top" src="..." alt="Card image cap"> }}
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
     <p class="card-text overflow-auto">{{body}}</p>
+    <h6 class="card-footer">Happiness Rating: {{emoji}}</h6>
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>

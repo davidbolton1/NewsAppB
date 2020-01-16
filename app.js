@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
-const pgp = require('pg-promise')()
+const pgp = require('pg-promise')({query:(e => console.log(e.query))});
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const path = require('path')
@@ -11,7 +11,7 @@ const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const checkAuthorization = require('./checkauth/authorization')
 const mlSentiment = require('ml-sentiment')
-const sentiment = mlSentiment({lang: 'en'}); // added this line
+const sentiment = mlSentiment({ lang: 'en' }); // added this line
 
 
 //const axios = require('axios');
@@ -97,8 +97,8 @@ app.post('/login', (req, res) => {
 
 })
 app.get('/all-stuff', async (req, res) => {
-    
-    let articles = await db.any('select articleid,title,body from articles')
+
+    let articles = await db.any('select articleid, title,body,emoji from articles')
     res.render('all-stuff', {
         articles: articles
     })
@@ -119,71 +119,19 @@ app.get('/all-stuff', async (req, res) => {
 
 
 app.get('/all-stuff', async (req, res) => {
-    let articles = await db.any('select articleid,title,body from articles')
+    let articles = await db.any('select articleid,title,body,emoji from articles')
     res.render('all-stuff', {
         articles: articles
     })
 })
 
 app.get('/happynews', async (req, res) => {
-    let happyarticles = await db.any('select * from newsarticles where sentiment > $1',[0])
+    let happyarticles = await db.any('select * from newsarticles where sentiment > $1', [0])
     res.render('happynews', {
         happyarticles: happyarticles
     })
 })
 
-/*
-app.get('/quoteSearch', (req, res) => {
-  const query = 'Trump'; // Date parameter
-  
-  
-   async function findSimilarQuotes() {
-  
-      const searchAddress = `https://quotes.rest/quote/search?&minlength=30&maxlength=800&query=${query}&private=false`
-
-  const quoteResponse = await axios.get(`${searchAddress}`, 
-  {headers: {
-    "Accept": "application/json",
-    "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
-  }})
-  .then((quoteResponse) => {
-      console.log(quoteResponse)
-  })
-  .catch((error) => {
-      this.showErrors(error.response.data.error)
-  })
-  return quoteResponse;
-  }
-  findSimilarQuotes();
-})
-*/
-
-/*
-app.get('/quoteSearch', (req, res) => {
-    let myText = 'Please make this text turn yoda style';
-
-    async function yodaText() {
-        const searchAddress = `https://api.funtranslations.com/translate/yoda.json?text=${myText}`
-
-        const quoteResponse = await axios.get(`${searchAddress}`)
-        .then((quoteResponse) => {
-            console.log(quoteResponse)
-        })
-        return quoteResponse
-
-            // headers: {
-            //     "Accept": "application/json",
-            //     "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
-            // }
-
-
-}
-
-yodaText();
-res.render('quoteSearch');
-}
-)
-*/
 // Listen for a specific port
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`)
