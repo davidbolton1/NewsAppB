@@ -9,9 +9,8 @@ const sentiment = mlSentiment({ lang: 'en' })
 const SALT_ROUNDS = 10
 
 
-router.get('/', async (req, res) => {
-    let articles = await db.any('select articleid,title,body from articles')
-    res.render('index', { articles: articles })
+router.get('/', (req, res) => {
+    res.render('index')
 })
 
 router.get('/logout', (req, res, next) => {

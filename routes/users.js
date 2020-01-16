@@ -38,7 +38,6 @@ router.get('/add-stuff', (req, res) => {
 
 //Add a post route to the add stuff
 router.post('/add-stuff', (req, res) => {
-  console.log('add article');
   let title = req.body.title
   let description = req.body.description
   let userId = req.session.user.userId
@@ -63,7 +62,7 @@ router.post('/add-stuff', (req, res) => {
 
 // Add a post route to the article edit page
 router.post('/update-article', (req, res) => {
-  console.log('update article'); 
+
   let title = req.body.title
   let description = req.body.description
   let articleId = req.body.articleId
