@@ -11,6 +11,7 @@
         <a class="nav-link" href="/login">Login</a>
       </li>
       {{/authenticated}}
+      {{#authenticated}}
         <a class="nav-link" href="/all-stuff">View User News</a>
       </li>
       <li class="nav-item">
@@ -21,7 +22,6 @@
       </li>
 
       </li>
-      {{#authenticated}}
         <a class="nav-link" href="/users/add-stuff">Add Stuff</a>
       </li>
       <li class="nav-item">
