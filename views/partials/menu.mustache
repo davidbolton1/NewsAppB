@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">An App of adding stuff</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar text-white navbar-expand-lg navbar-light bg-info shadow-lg p-3 mb-5 rounded">
+  <a class="navbar-brand text-white" href="/">Save and Share Your Knowledge</a>
+  <button class="navbar-toggler text-white" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
@@ -12,6 +12,8 @@
       </li>
       {{/authenticated}}
       <li class="nav-item">
+        <a class="nav-link" href="/all-stuff">View News</a>
+<li class="nav-item">
         <a class="nav-link" href="/all-stuff">View User News</a>
       </li>
       <li class="nav-item">
@@ -19,6 +21,8 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/happynews">Happy News</a>
+      </li>
+
       </li>
       {{#authenticated}}
         <a class="nav-link" href="/users/add-stuff">Add Stuff</a>

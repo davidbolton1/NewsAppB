@@ -9,19 +9,19 @@
 <body>
 
 
-<h1> Latest Stuff</h1>
+<h1>Latest News</h1>
 
 <div class="container">
 
 {{> menu}}
 
-<div class="list-group">
+<div class="list-group ">
 {{#articles}}
-<div class="card" style="width: 18rem;">
+<div class="card text-dark" style="width: 18rem;">
   {{! <img class="card-img-top" src="..." alt="Card image cap"> }}
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
-    <p class="card-text">{{body}}</p>
+    <p class="card-text overflow-auto">{{body}}</p>
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>

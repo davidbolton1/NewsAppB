@@ -9,13 +9,13 @@
 <body>
 
 
-<h1> My Stuff</h1>
+<h1> My News</h1>
 
 <div class="container">
 
 {{> menu}}
 
-<div class="list-group">
+<div class="list-group bg-secondary rounded overflow-auto">
     {{#articles}}
 
     <div class="d-flex w-100 justify-content-between">
@@ -25,7 +25,7 @@
 
     <div class="article-action-button">
     <a href="/users/articles/edit/{{articleid}}">
-        <button type="button" class="btn btn-primary">Edit</button>
+        <button type="button" class="btn btn-info">Edit</button>
   </a>
 
     <form action="/users/delete-article" method="POST">
@@ -46,3 +46,4 @@
 
 </body>
 </html>
+
