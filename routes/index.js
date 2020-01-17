@@ -158,7 +158,7 @@ router.get('/topnews', async (req, res) => {
         return data;
     }
     findNewsArticles();
-    let usnewsarticles = await db.any('select url,title,body,sentimentemoji from newsarticles')
+    let usnewsarticles = await db.any('select url,title,body,sentimentemoji,newsid from newsarticles')
     res.render('topnews', { usnewsarticles: usnewsarticles })
 })
 
