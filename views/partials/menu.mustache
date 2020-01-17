@@ -10,14 +10,20 @@
       </li>
         <a class="nav-link" href="/login">Login</a>
       </li>
-      {{/authenticated}}
-      
-      <li class="nav-item">
+       <li class="nav-item">
         <a class="nav-link" href="/topnews">Top News</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/happynews">Happy News</a>
       </li>
+      {{/authenticated}}
+      
+      {{! <li class="nav-item">
+        <a class="nav-link" href="/topnews">Top News</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/happynews">Happy News</a>
+      </li> }}
       
       {{#authenticated}}
         <a class="nav-link" href="/all-stuff">View User News</a>
