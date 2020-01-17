@@ -9,7 +9,7 @@ const session = require('express-session')
 const path = require('path')
 const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
-const checkAuthorization = require('./checkauth/authorization')
+const {checkAuthorization, withRedirect} = require('./checkauth/authorization')
 const mlSentiment = require('ml-sentiment')
 const sentiment = mlSentiment({ lang: 'en' }); // added this line
 
@@ -47,8 +47,8 @@ app.use(session({
     saveUninitialized: false
 }))
 // Setup routers
-app.use('/', indexRoutes)
-app.use('/users', checkAuthorization, userRoutes)
+app.use('/', checkAuthorization, indexRoutes)
+app.use('/users', withRedirect, userRoutes)
 // Middleware to check if logged in or logged out
 app.use((req, res, next) => {
     // If the user is authenticated set to false, else true
@@ -102,19 +102,7 @@ app.get('/all-stuff', async (req, res) => {
     res.render('all-stuff', {
         articles: articles
     })
-    // articles.forEach(function(title) {
-    //     title.sentiment = sentiment.classify(title.title);
-    //     if (title.sentiment >= 5) {
-    //       title.emoji = "😃";
-    //     } else if (title.sentiment > 0) {
-    //       title.emoji = "🙂";
-    //     } else if (title.sentiment == 0) {
-    //       title.emoji = "😐";
-    //     } else {
-    //       title.emoji = "😕";
-    //     }
-    //     console.log(title.sentiment)
-    //   });
+  
 })
 
 

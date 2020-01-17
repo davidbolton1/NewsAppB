@@ -1,4 +1,4 @@
-function checkAuthoriation(req, res, next) {
+function withRedirect(req, res, next) {
     if (req.session) {
         if(req.session.user) {
             res.locals.authenticated = true
@@ -11,4 +11,18 @@ function checkAuthoriation(req, res, next) {
     }
 }
 
-module.exports = checkAuthoriation
+function checkAuthorization(req, res, next) {
+    if (req.session) {
+        if(req.session.user) {
+            res.locals.authenticated = true
+            next()
+        } else {
+            res.locals.autheticated = false
+            next()
+        }
+    } else {
+            res.locals.autheticated = false
+            next()
+    }
+}
+module.exports = {checkAuthorization, withRedirect}
