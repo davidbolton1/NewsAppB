@@ -11,7 +11,8 @@ const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const {checkAuthorization, withRedirect} = require('./checkauth/authorization')
 const mlSentiment = require('ml-sentiment')
-const sentiment = mlSentiment({ lang: 'en' }); // added this line
+const sentiment = mlSentiment({ lang: 'en' });
+const icons = require('glyphicons'); // added this line
 
 
 //const axios = require('axios');
