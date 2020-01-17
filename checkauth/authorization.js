@@ -2,6 +2,7 @@ function withRedirect(req, res, next) {
     if (req.session) {
         if(req.session.user) {
             res.locals.authenticated = true
+            res.locals.userId = req.session.user.userId
             next()
         } else {
             res.redirect('/login')
