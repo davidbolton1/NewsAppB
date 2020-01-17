@@ -26,7 +26,10 @@
     <p class="card-text">Click Here!</p></a>
     {{! <p class="card-text overflow-auto">{{body}}</p> 
         <h6 class="card-footer">Happiness Rating: {{sentimentemoji}}</h1>
-
+{{#authenticated}}              
+    {{! <button type="button" class="btn btn-primary" onclick="insertFavorites()"> Bootstrap Button</button> }}
+    <a href="/users/favorites/add/{{newsid}}"> Add Favorite </a>
+    {{/authenticated}}
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>

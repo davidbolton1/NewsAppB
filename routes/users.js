@@ -97,5 +97,20 @@ router.get('/articles', (req, res) => {
   
 })
 
+// Add a route for user favorites
+router.get('/favorites', async (req, res) => {
+  let usnewsarticles = await db.manyOrNone(`
+  SELECT newsarticles.title, newsarticles.url, newsarticles.sentimentemoji, users.userid 
+  FROM users, newsarticles, favorites
+  WHERE users.userid=favorites.userid and newsarticles.newsid=favorites.articleid and users.userid=$1`, [req.session.user.userId])
+  res.render('topnews', {usnewsarticles: usnewsarticles})
+  
+})
 
+router.get('/favorites/add/:newsid', async (req, res) => {
+  //console.log(req.params.newsid)
+  //console.log(req.session.user.userId)
+  db.none('insert into favorites(articleid, userid) VALUES($1,$2)', [req.params.newsid, req.session.user.userId])
+  res.redirect('/topnews')
+})
 module.exports = router
