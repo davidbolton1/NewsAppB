@@ -100,10 +100,10 @@ router.get('/articles', (req, res) => {
 // Add a route for user favorites
 router.get('/favorites', async (req, res) => {
   let usnewsarticles = await db.manyOrNone(`
-  SELECT newsarticles.title, newsarticles.url, newsarticles.sentimentemoji, users.userid 
+  SELECT newsarticles.title, newsarticles.newsid, newsarticles.url, newsarticles.sentimentemoji, users.userid 
   FROM users, newsarticles, favorites
   WHERE users.userid=favorites.userid and newsarticles.newsid=favorites.articleid and users.userid=$1`, [req.session.user.userId])
-  res.render('topnews', {usnewsarticles: usnewsarticles})
+  res.render('favorites', {usnewsarticles: usnewsarticles})
 
 })
 
@@ -112,6 +112,15 @@ router.get('/favorites/add/:newsid', async (req, res) => {
   //console.log(req.session.user.userId)
   db.none('insert into favorites(articleid, userid) VALUES($1,$2)', [req.params.newsid, req.session.user.userId])
   res.redirect('/topnews')
+})
+
+router.post('/delete-favorite-article', async (req,res) => {
+  //let articleId = req.body.articleId
+  let newsid = req.body.newsid
+  console.log(newsid)
+
+  await db.none('delete from favorites where articleid= $1', [newsid])
+  res.redirect('/users/favorites')
 })
 
 module.exports = router
