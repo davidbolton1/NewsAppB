@@ -11,7 +11,6 @@ let settings = {
     
         "Accept": "application/json",
         "X-TheySaidSo-Api-Secret": "B_amwVnizcdaqfBbr1uboAeF"
-      
 }
 const quoteResponse = await fetch(`${searchAddress}`, settings)
 .then((quoteResponse) => {

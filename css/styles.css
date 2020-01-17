@@ -25,6 +25,12 @@ h6 {
     color:black;
 }
 
+.heart-icon {
+    float:right;
+}
+
+
+
 /* HOVER BOEXES */
 
 .hover-container {
@@ -121,7 +127,7 @@ h6 {
 }
 
 .sticky-footer {
-    position: relative;
+    position: absolute;
     display:flex;
     bottom: 0;
     height: 60px;
