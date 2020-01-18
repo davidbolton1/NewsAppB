@@ -19,7 +19,7 @@ const icons = require('glyphicons'); // added this line
 
 
 
-const PORT = 3000
+const PORT = process.env.PORT || 8080
 const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
 //const SALT_ROUNDS = 10
 // For our partials pages, join current directory name to our views folder
