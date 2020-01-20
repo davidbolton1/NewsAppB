@@ -130,6 +130,7 @@ router.get('/topnews', async (req, res) => {
                     let title = item.title
                     let description = item.description
                     let url = item.url
+    
 
                     let itemsentiment = sentiment.classify(item.title);
                     if (itemsentiment >= 5) {
@@ -141,10 +142,13 @@ router.get('/topnews', async (req, res) => {
                     } else {
                         emoji = "😕";
                     }
+                    let myemoji = emoji
+                //console.log(emoji)
                 db.oneOrNone('select * from newsarticles where title=$1', [title])
                 .then((res) => {
                     if (!res) {
-                        db.none('insert into newsarticles(title, authorname, body, url, sentiment, sentimentemoji) VALUES($1, $2, $3, $4, $5, $6)', [title, author, description, url, itemsentiment, emoji])
+                        //console.log(myemoji)
+                        db.none('insert into newsarticles(title, authorname, body, url, sentiment, sentimentemoji) VALUES($1, $2, $3, $4, $5, $6)', [title, author, description, url, itemsentiment, myemoji])
                     }
                 })
 
