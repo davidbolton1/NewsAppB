@@ -19,7 +19,7 @@ require('dotenv').config();
 
 
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8020
 const CONNECTION_STRING = process.env.CONNECTION_STRING
 //const SALT_ROUNDS = 10
 // For our partials pages, join current directory name to our views folder
