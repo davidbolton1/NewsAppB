@@ -13,14 +13,14 @@ const {checkAuthorization, withRedirect} = require('./checkauth/authorization')
 const mlSentiment = require('ml-sentiment')
 const sentiment = mlSentiment({ lang: 'en' });
 const icons = require('glyphicons'); // added this line
-
+require('dotenv').config();
 
 //const axios = require('axios');
 
 
 
-const PORT = 3000
-const CONNECTION_STRING = "postgres://localhost:5432/newsdb"
+const PORT = process.env.PORT || 8080
+const CONNECTION_STRING = process.env.CONNECTION_STRING
 //const SALT_ROUNDS = 10
 // For our partials pages, join current directory name to our views folder
 const VIEWS_PATH = path.join(__dirname, '/views')
@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({
 }))
 //Add middleware to handle a session
 app.use(session({
-    secret: 'aljfajejsj',
+    secret: process.env.SECRET,
     resave: false,
     // Only save the session when we put something (login)
     saveUninitialized: false
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 })
 
 // Connect our DB
-db = pgp(CONNECTION_STRING)
+db = pgp(process.env.CONNECTION_STRING)
 
 app.post('/login', (req, res) => {
     let username = req.body.username
