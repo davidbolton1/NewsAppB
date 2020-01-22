@@ -19,8 +19,10 @@ html, body {
 }
 
 h1 {
+    padding-left: 50px;
     font-size: 3rem;
     font-family: 'Fredericka the Great', cursive;
+
 }
 
 h6 {
