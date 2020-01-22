@@ -1,7 +1,5 @@
 # MY NEWS STAND (mynewsstand.net)
 
-
-
 ### Description
 
 My News Stand is a program that lets the user create, save, and share their favorite news articles. 
