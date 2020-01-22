@@ -20,12 +20,12 @@
 {{#usnewsarticles}}
 <div class="card text-dark">
   {{! <img class="card-img-top" src="..." alt="Card image cap"> }}
-  <div class="card-body">
+  <div class ="card-body">
     <h5 class="card-title">{{title}}</h5>
     <a href={{url}}>
-    <p class="card-text">Click Here!</p></a>
+    <p class="card-text">Article Link</p></a>
     {{! <p class="card-text overflow-auto">{{body}}</p> 
-        <h6 class="card-footer">Happiness Rating: {{sentimentemoji}}</h1>
+        <h6 class="card-footer">Happiness Rating: {{sentimentemoji}}
  {{#authenticated}}          
 
 <button type="button" class="heart-icon">
@@ -36,6 +36,7 @@
 </button>
 
     {{/authenticated}}
+    </h1>
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>

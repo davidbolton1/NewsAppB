@@ -66,6 +66,7 @@ h6 {
 
 }
 
+
 .box img {
 	max-width: 100%;
 	transition: transform 2s;
@@ -125,6 +126,11 @@ h6 {
 }
 
 .card-text {
+    display: flex;
+    justify-content: center;
+}
+
+.card-footer {
     display: flex;
     justify-content: center;
 }
