@@ -80,7 +80,7 @@ app.post('/login', (req, res) => {
                             }
                         }
                         // Redirect to a new route
-                        res.redirect('/')
+                        res.redirect('/index')
                     } else {
                         // If pw doesn't match
                         res.render('login', {

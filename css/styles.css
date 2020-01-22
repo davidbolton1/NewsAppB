@@ -133,7 +133,7 @@ h6 {
 
 .card-footer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .list-group {
