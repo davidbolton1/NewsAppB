@@ -148,7 +148,7 @@ h6 {
 }
 
 .sticky-footer {
-    position: absolute;
+    position: relative;
     display:flex;
     bottom: 0;
     height: 60px;
