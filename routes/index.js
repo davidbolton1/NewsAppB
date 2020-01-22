@@ -86,7 +86,7 @@ router.post('/login', (req, res) => {
                             }
                         }
                         // Redirect to a new route
-                        res.redirect('/users/articles')
+                        res.redirect('/topnews')
                     } else {
                         // If pw doesn't match
                         res.render('login', {
