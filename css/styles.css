@@ -115,6 +115,7 @@ h6 {
 }
 
 .card {
+    margin-bottom: 3px;
     height: auto; 
     opacity: .8;
 }
