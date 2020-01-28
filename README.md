@@ -40,7 +40,7 @@ Make sure in the /views/partials/header.mustache file, the following HTML and li
 - A "Trust/Prefered" rating for news authors and hosts that present the articles.
 
 ### Created By:
-David Bolten
+David Bolton
 Veronica Kemp
 
 
