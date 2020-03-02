@@ -30,6 +30,11 @@
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>
+<form action="/users/favorites/delete-article" method="POST">
+        <input type="hidden" name="articleId" value={{articleid}} />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    </div>
 {{/usnewsarticles}}
 </div>
 

@@ -26,10 +26,17 @@
     <p class="card-text">Click Here!</p></a>
     {{! <p class="card-text overflow-auto">{{body}}</p> 
         <h6 class="card-footer">Happiness Rating: {{sentimentemoji}}</h1>
-
+{{#authenticated}}              
+    <a href="/users/favorites/add/{{newsid}}"> Add Favorite </a>
+    {{/authenticated}}
     {{! <a href="#" class="btn btn-primary">Go somewhere</a> }}
   </div>
 </div>
+<form action="/users/favorites/" method="POST">
+        <input type="hidden" name="articleId" value={{articleid}} />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    </div>
 {{/usnewsarticles}}
 </div>
 
@@ -44,7 +51,6 @@
     
     
     
-    <h6 class="card-footer">Happyness Rating: {{sentimentemoji}}</h1>
 
 
 

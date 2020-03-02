@@ -3,7 +3,8 @@ const express = require('express')
 const app = express()
 const mustacheExpress = require('mustache-express')
 const bodyParser = require('body-parser')
-const pgp = require('pg-promise')({query:(e => console.log(e.query))});
+// const pgp = require('pg-promise')({query:(e => console.log(e.query))});
+const pgp = require('pg-promise')()
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const path = require('path')
@@ -11,8 +12,7 @@ const userRoutes = require('./routes/users')
 const indexRoutes = require('./routes/index')
 const {checkAuthorization, withRedirect} = require('./checkauth/authorization')
 const mlSentiment = require('ml-sentiment')
-const sentiment = mlSentiment({ lang: 'en' });
-const icons = require('glyphicons'); // added this line
+const sentiment = mlSentiment({ lang: 'en' }); // added this line
 
 
 //const axios = require('axios');
@@ -115,6 +115,7 @@ app.get('/all-stuff', async (req, res) => {
 })
 
 app.get('/happynews', async (req, res) => {
+    
     let happyarticles = await db.any('select * from newsarticles where sentiment > $1', [0])
     res.render('happynews', {
         happyarticles: happyarticles
